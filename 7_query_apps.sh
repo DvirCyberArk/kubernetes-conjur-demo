@@ -7,8 +7,13 @@ announce "Validating that the deployments are functioning as expected."
 
 set_namespace $TEST_APP_NAMESPACE_NAME
 
-init_url=$($cli describe service test-app-summon-init | grep 'LoadBalancer Ingress' | awk '{ print $3 }'):8080
-sidecar_url=$($cli describe service test-app-summon-sidecar | grep 'LoadBalancer Ingress' | awk '{ print $3 }'):8080
+if [ $PLATFORM = 'kubernetes' ]; then
+  init_url=$($cli describe service test-app-summon-init | grep 'LoadBalancer Ingress' | awk '{ print $3 }'):8080
+  sidecar_url=$($cli describe service test-app-summon-sidecar | grep 'LoadBalancer Ingress' | awk '{ print $3 }'):8080
+elif [ $PLATFORM = 'openshift' ]; then
+  init_url=
+  sidecar_url=
+fi
 
 echo -e "Adding entry to the init app\n"
 curl \

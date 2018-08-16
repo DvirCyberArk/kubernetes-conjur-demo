@@ -10,7 +10,7 @@ fi
 announce "Building and pushing test app images."
 
 pushd test_app
-  docker build -t test-app:$CONJUR_NAMESPACE_NAME .
+  docker build -t test-app:$CONJUR_NAMESPACE_NAME -f Dockerfile.minishift .
 
   test_app_image=$(platform_image test-app)
   docker tag test-app:$CONJUR_NAMESPACE_NAME $test_app_image

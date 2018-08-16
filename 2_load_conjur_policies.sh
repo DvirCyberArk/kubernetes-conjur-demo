@@ -59,6 +59,11 @@ pushd pg
   sed -e "s#{{ TEST_APP_PG_PASSWORD }}#$password#g" ./schema.template.sql > ./schema.sql
 popd
 
+pushd test_app
+  sed -e "s#{{ TEST_APP_PG_PASSWORD }}#$password#g" ./secrets.template.yml |
+    sed -e "s#{{ TEST_APP_NAMESPACE_NAME }}#$TEST_APP_NAMESPACE_NAME#g" > ./secrets.yml
+popd
+
 announce "Added DB password value: $password"
 
 $cli exec $conjur_cli_pod -- conjur authn logout
